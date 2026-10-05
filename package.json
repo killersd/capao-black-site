@@ -1,0 +1,32 @@
+{
+  "name": "capao-black",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n api,web -c red,gray \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:api": "node --watch server/index.js",
+    "dev:web": "vite",
+    "build": "vite build",
+    "start": "node server/index.js",
+    "images": "node scripts/process-images.mjs",
+    "db:import": "node scripts/import-local.mjs"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.2.0",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-router-dom": "^7.18.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.2",
+    "concurrently": "^10.0.5",
+    "sharp": "^0.35.5",
+    "vite": "^8.3.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
