@@ -5,7 +5,7 @@
 <h1 align="center">Capão Black — site oficial</h1>
 
 <p align="center">
-  <a href="https://capao-black.vercel.app"><strong>capao-black.vercel.app</strong></a>
+  <a href="https://capaoblack.com.br"><strong>capaoblack.com.br</strong></a>
   ·
   <a href="https://open.spotify.com/artist/26PeNvrYEoKNkxr18RgvHr">Spotify</a>
 </p>
