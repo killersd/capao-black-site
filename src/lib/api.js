@@ -53,4 +53,5 @@ export const api = {
   messages: () => request('GET', '/api/messages'),
   markMessage: (id, read) => request('PATCH', `/api/messages/${id}`, { read }),
   deleteMessage: (id) => request('DELETE', `/api/messages/${id}`),
+  stats: (days) => request('GET', `/api/stats?days=${days}`),
 };

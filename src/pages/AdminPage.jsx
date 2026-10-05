@@ -4,6 +4,7 @@ import { useStore } from '../lib/store.jsx';
 import { api } from '../lib/api.js';
 import { EDITORS } from '../admin/editors.jsx';
 import { SectionForm } from '../admin/EditorPanel.jsx';
+import Stats from '../admin/Stats.jsx';
 
 function Login() {
   const { login } = useStore();
@@ -105,6 +106,7 @@ function Messages({ onCount }) {
 
 const TABS = [
   { key: 'overview', title: 'Visão geral' },
+  { key: 'stats', title: 'Estatísticas' },
   { key: 'messages', title: 'Mensagens' },
   ...Object.entries(EDITORS).map(([key, { title }]) => ({ key, title })),
 ];
@@ -173,6 +175,7 @@ function Dashboard() {
               </div>
             </>
           )}
+          {tab === 'stats' && <Stats />}
           {tab === 'messages' && <Messages onCount={setUnread} />}
           {EDITORS[tab] && <SectionForm key={tab} section={tab} />}
         </div>

@@ -13,7 +13,7 @@ export function Footer() {
             ?.filter((x) => x.url)
             .map((x) => (
               <li key={x.id}>
-                <a href={x.url} target="_blank" rel="noreferrer">
+                <a href={x.url} target="_blank" rel="noreferrer" data-track="rede_social" data-label={x.label}>
                   {x.label}
                 </a>
               </li>

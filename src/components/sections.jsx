@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../lib/store.jsx';
 import { api } from '../lib/api.js';
+import { trackClick } from '../lib/track.js';
 import { dateParts, formatDate, paragraphs, spotifyEmbed, todayIso, yearOf } from '../lib/utils.js';
 import { Section } from './Section.jsx';
 import { Lightbox } from './Lightbox.jsx';
@@ -64,7 +65,7 @@ export function Releases({ index }) {
             )}
             <div className="release-links">
               {current.otherLinks?.filter((l) => l.url).map((l) => (
-                <a key={l.id} className="btn btn-sm" href={l.url} target="_blank" rel="noreferrer">
+                <a key={l.id} className="btn btn-sm" href={l.url} target="_blank" rel="noreferrer" data-track="link_lancamento" data-label={`${current.title} · ${l.label}`}>
                   {l.label}
                 </a>
               ))}
@@ -166,7 +167,7 @@ function EventRow({ event: e, past }) {
       <div className="event-cta">
         {e.status && e.status !== 'confirmado' && <span className={`badge badge-${e.status}`}>{e.status}</span>}
         {!past && !off && e.ticketUrl && e.status !== 'esgotado' && (
-          <a className="btn btn-sm btn-accent" href={e.ticketUrl} target="_blank" rel="noreferrer">
+          <a className="btn btn-sm btn-accent" href={e.ticketUrl} target="_blank" rel="noreferrer" data-track="ingresso" data-label={[e.venue, e.city].filter(Boolean).join(" · ")}>
             Ingressos
           </a>
         )}
@@ -343,7 +344,7 @@ export function Merch({ index }) {
                 </div>
                 {p.description && <p>{p.description}</p>}
                 {state === 'disponivel' && p.buyUrl && (
-                  <a className="btn btn-sm btn-accent" href={p.buyUrl} target="_blank" rel="noreferrer">
+                  <a className="btn btn-sm btn-accent" href={p.buyUrl} target="_blank" rel="noreferrer" data-track="comprar_merch" data-label={p.name}>
                     Comprar
                   </a>
                 )}
@@ -371,6 +372,7 @@ export function Contact({ index }) {
     try {
       await api.sendMessage(form);
       setState({ busy: false, ok: true, error: '' });
+      trackClick('mensagem_enviada', form.subject || 'Sem assunto');
       setForm({ name: '', email: '', subject: '', message: '', website: '' });
     } catch (err) {
       setState({ busy: false, ok: false, error: err.message });
@@ -390,7 +392,7 @@ export function Contact({ index }) {
           <ul className="socials">
             {s.socials?.filter((x) => x.url).map((x) => (
               <li key={x.id}>
-                <a href={x.url} target="_blank" rel="noreferrer" className="link-arrow">
+                <a href={x.url} target="_blank" rel="noreferrer" className="link-arrow" data-track="rede_social" data-label={x.label}>
                   {x.label}
                 </a>
               </li>

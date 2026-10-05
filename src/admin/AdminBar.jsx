@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useStore } from '../lib/store.jsx';
 
 export function AdminBar() {
   const { isAdmin, logout, openEditor } = useStore();
-  if (!isAdmin) return null;
+  const { pathname } = useLocation();
+  if (!isAdmin || pathname === '/admin') return null;
   return (
     <div className="admin-bar">
       <span className="admin-bar-dot" aria-hidden />

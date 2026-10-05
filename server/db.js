@@ -7,7 +7,7 @@ const url = process.env.DATABASE_URL || process.env.POSTGRES_URL;
 if (!url) throw new Error('DATABASE_URL não definido. Configure a conexão do Neon no .env ou na Vercel.');
 
 export const sql = neon(url);
-const q = (text, params = []) => sql.query(text, params);
+export const q = (text, params = []) => sql.query(text, params);
 
 export const SECTIONS = ['settings', 'bio', 'members', 'bandPhotos', 'galleries', 'events', 'releases', 'lyrics', 'merch'];
 
@@ -36,6 +36,25 @@ export function ensureReady() {
       key text NOT NULL,
       at timestamptz NOT NULL DEFAULT now())`);
     await q(`CREATE INDEX IF NOT EXISTS attempts_key_at ON attempts (key, at)`);
+    // estatísticas: sem IP e sem cookies; "visitor" é um hash que muda todo dia
+    await q(`CREATE TABLE IF NOT EXISTS visits (
+      day date NOT NULL DEFAULT (now() AT TIME ZONE 'America/Sao_Paulo')::date,
+      visitor text NOT NULL,
+      path text NOT NULL,
+      source text,
+      device text,
+      country text,
+      region text,
+      at timestamptz NOT NULL DEFAULT now())`);
+    await q(`CREATE INDEX IF NOT EXISTS visits_day ON visits (day)`);
+    await q(`CREATE TABLE IF NOT EXISTS clicks (
+      day date NOT NULL DEFAULT (now() AT TIME ZONE 'America/Sao_Paulo')::date,
+      visitor text NOT NULL,
+      name text NOT NULL,
+      label text,
+      path text,
+      at timestamptz NOT NULL DEFAULT now())`);
+    await q(`CREATE INDEX IF NOT EXISTS clicks_day ON clicks (day)`);
 
     const seed = buildSeed();
     for (const key of SECTIONS) {

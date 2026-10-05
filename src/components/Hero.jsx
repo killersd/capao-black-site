@@ -20,7 +20,7 @@ export function Hero() {
           {s.heroText && <p className="hero-text">{s.heroText}</p>}
           <div className="hero-cta">
             {s.ctaUrl && (
-              <a className="btn btn-accent btn-lg" href={s.ctaUrl} target="_blank" rel="noreferrer">
+              <a className="btn btn-accent btn-lg" href={s.ctaUrl} target="_blank" rel="noreferrer" data-track="botao_principal" data-label={s.ctaLabel}>
                 {s.ctaLabel || 'Ouvir'}
               </a>
             )}

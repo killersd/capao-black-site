@@ -4,6 +4,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import crypto from 'node:crypto';
 import * as db from './db.js';
+import * as stats from './stats.js';
 
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
@@ -142,6 +143,25 @@ app.delete('/api/messages/:id', auth, wrap(async (req, res) => {
   await db.deleteMessage(req.params.id);
   res.json({ ok: true });
 }));
+
+// ---------- estatísticas ----------
+// Coleta anônima enviada pelo site (navigator.sendBeacon manda text/plain)
+app.post('/api/track', express.text({ type: '*/*', limit: '4kb' }), wrap(async (req, res) => {
+  let body = {};
+  try {
+    body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
+  } catch {
+    /* corpo inválido: ignora */
+  }
+  await stats.track(req, body, await secret());
+  res.status(204).end();
+}));
+
+app.get('/api/stats', auth, wrap(async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  res.json(await stats.report(Number(req.query.days)));
+}));
+
 
 app.use('/api', (req, res) => res.status(404).json({ error: 'Rota não encontrada' }));
 

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { useStore } from './lib/store.jsx';
 import { visibleSections } from './lib/sections.js';
+import { onDocumentClick, trackView } from './lib/track.js';
 import { Header } from './components/Header.jsx';
 import { Footer } from './components/Footer.jsx';
 import { AdminBar } from './admin/AdminBar.jsx';
@@ -17,6 +18,17 @@ function ScrollTop() {
   useEffect(() => {
     if (!hash) window.scrollTo(0, 0);
   }, [pathname, hash]);
+  return null;
+}
+
+// Uma visualização por página aberta + cliques em links (ver lib/track.js)
+function Analytics() {
+  const { pathname } = useLocation();
+  useEffect(() => trackView(pathname), [pathname]);
+  useEffect(() => {
+    document.addEventListener('click', onDocumentClick, true);
+    return () => document.removeEventListener('click', onDocumentClick, true);
+  }, []);
   return null;
 }
 
@@ -42,6 +54,7 @@ export default function App() {
   return (
     <>
       <ScrollTop />
+      <Analytics />
       <Header links={visibleSections(content, isAdmin)} />
       <main>
         <Routes>
