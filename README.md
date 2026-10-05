@@ -1,73 +1,54 @@
-# Capão Black — site oficial
+<p align="center">
+  <img src="public/img/emblem.png" alt="Capão Black" width="120" />
+</p>
 
-Site da banda em React (Vite). A API em Express roda como função serverless na Vercel (`api/index.js`) e os dados ficam no Neon Postgres. Todo o conteúdo é editável pela área administrativa.
+<h1 align="center">Capão Black — site oficial</h1>
 
-## Publicar na Vercel
+<p align="center">
+  <a href="https://capao-black.vercel.app"><strong>capao-black.vercel.app</strong></a>
+  ·
+  <a href="https://open.spotify.com/artist/26PeNvrYEoKNkxr18RgvHr">Spotify</a>
+</p>
 
-1. Suba o projeto para um repositório no GitHub.
-2. Na Vercel: **Add New > Project** e importe o repositório (as configurações vêm do `vercel.json`).
-3. Em **Storage**, crie um banco **Neon** (ou conecte um existente) e vincule ao projeto. Isso cria a variável `DATABASE_URL`.
-4. Em **Settings > Environment Variables**, adicione `ADMIN_USER`, `ADMIN_PASSWORD` e `JWT_SECRET`.
-   Para gerar o segredo: `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"`
-5. Faça o deploy. Na primeira requisição as tabelas são criadas e o conteúdo inicial é inserido.
+<p align="center">
+  <img src="public/img/banda-1400.jpg" alt="Capão Black" width="720" />
+</p>
 
-### Levar o conteúdo já cadastrado localmente
+Site oficial da banda **Capão Black**, com o álbum *Vozes da revolta* (2025), agenda de shows, letras, fotos e contato.
 
-Com a `DATABASE_URL` do Neon no `.env`:
+## No site
 
-```bash
-npm run db:import    # copia server/data/db.json e server/uploads/ para o banco
-```
+- **Música** — lançamentos com capa, faixas e player do Spotify
+- **Agenda** — próximos shows e histórico de apresentações
+- **A banda** — biografia e formação
+- **Fotos** — ensaios da banda
+- **Ao vivo** — galerias de fotos dos shows
+- **Letras** — letras das músicas, faixa a faixa
+- **Merch** — material oficial da banda
+- **Contato** — formulário para shows, imprensa e parcerias
 
-As URLs das imagens (`/uploads/...`) continuam iguais.
+Todo o conteúdo é gerenciado pela própria banda em uma área administrativa integrada ao site.
 
-## Rodando localmente
+## Tecnologias
 
-```bash
-npm install
-cp .env.example .env      # preencha DATABASE_URL, ADMIN_USER e ADMIN_PASSWORD
-npm run dev               # site em http://localhost:5173 (API em :3001)
-```
-
-O ambiente local usa o banco indicado em `DATABASE_URL`. Para não mexer no conteúdo publicado, crie uma *branch* no Neon e use a URL dela no `.env`.
-
-## Área administrativa
-
-- Acesse `/admin` (link "área da banda" no rodapé) e entre com `ADMIN_USER` / `ADMIN_PASSWORD`.
-  Sem `ADMIN_PASSWORD` configurado, o login fica desativado.
-- Com o login ativo, **cada seção do site mostra um botão "Editar"** que abre um painel lateral.
-  O painel `/admin` reúne as mesmas seções, as mensagens do formulário de contato e um resumo.
-
-O que pode ser editado:
-
-| Seção | Conteúdo |
+| Camada | Tecnologias |
 |---|---|
-| Configurações | nome, texto e foto do topo, botão principal, e-mail, redes sociais, rodapé |
-| Lançamentos | álbuns/EPs/singles: capa, data, faixas, player do Spotify, outros links |
-| Agenda | shows futuros (passados vão para "shows anteriores" automaticamente), status, ingressos |
-| Biografia | texto, foto, ficha rápida |
-| Integrantes | nome, função, foto (sem nome = oculto para visitantes) |
-| Fotos da banda | envio múltiplo com legenda e ordem |
-| Ao vivo | galerias de shows com data, local, crédito e fotos |
-| Letras | letra, faixa, lançamento, créditos (sem texto = oculta para visitantes) |
-| Merch | "em breve" / aberta / oculta, produtos com preço, foto, estoque e link de compra |
-| Mensagens | caixa de entrada do formulário de contato |
+| Interface | [React](https://react.dev) 19, [React Router](https://reactrouter.com), CSS próprio (sem framework) |
+| Build | [Vite](https://vite.dev) |
+| API | [Node.js](https://nodejs.org) + [Express](https://expressjs.com) em funções serverless |
+| Banco de dados | [Neon](https://neon.tech) (PostgreSQL serverless) |
+| Hospedagem | [Vercel](https://vercel.com) (site estático, funções e CDN) |
+| Autenticação | JSON Web Token |
+| Imagens | redimensionamento no navegador antes do envio; [sharp](https://sharp.pixelplumbing.com) para as artes do site |
+| Tipografia | Big Shoulders Display, Archivo e IBM Plex Mono ([Google Fonts](https://fonts.google.com)) |
 
-Seções vazias (fotos de shows, letras) não aparecem para visitantes até ganharem conteúdo.
+## Design
 
-## Onde ficam os dados
+- Paleta tirada da capa de *Vozes da revolta*: preto queimado, osso e brasa
+- Cortes diagonais e cantos chanfrados inspirados nas letras do logo
+- Layout responsivo para celular, tablet e desktop
+- Respeita a preferência de movimento reduzido do sistema
 
-Tudo no Neon Postgres (tabelas criadas automaticamente por `server/db.js`):
+---
 
-- `content` — cada seção do site, em JSON (conteúdo inicial em `server/seed.js`)
-- `messages` — formulário de contato
-- `images` — fotos enviadas pelo admin, servidas em `/uploads/<arquivo>` com cache na CDN da Vercel
-- `attempts` — limite de tentativas de login e de envio de mensagens
-
-As imagens são reduzidas no navegador antes do envio (máx. 2000 px, até ~4 MB), por causa do limite de 4,5 MB por requisição da Vercel.
-O plano gratuito do Neon tem 0,5 GB, o que comporta algumas centenas de fotos.
-
-## Imagens da banda
-
-`npm run images` regenera, a partir de `imagens/`, o logo branco com transparência, o emblema
-(usado no favicon e no cabeçalho) e a foto da banda em três tamanhos em `public/img/`.
+© Capão Black. Todos os direitos reservados sobre marca, imagens, músicas e letras.
